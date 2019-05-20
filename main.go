@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/file/download", handler.DownloadFileHandler)
 	http.HandleFunc("/file/update", handler.UpdateFileMetaHandler)
 	http.HandleFunc("/file/delete", handler.DeleteFileHandler)
+	http.HandleFunc("/user/signup", handler.UserSignupHandler)
 
 
 	fmt.Println("server is started...")

@@ -1,6 +1,8 @@
 package meta
 
 import (
+	"fmt"
+	"github.com/pibigstar/go-cloudstore/db"
 	"sort"
 )
 
@@ -43,4 +45,23 @@ func GetLastFileMeta(count int) []FileMeta {
 
 func RemoveFileMeta(filehash string)  {
 	delete(fileMetes,filehash)
+}
+// 上传文件后，将文件信息保存到mysql中
+func UpdateFileMetaDB(meta FileMeta) bool{
+	return db.InsertFile(meta.FileSha1,meta.FileName,meta.Location,meta.FileSize)
+}
+// 从数据库中获取文件元数据
+func GetFileMetaDB(hash string) *FileMeta{
+	file, err := db.GetFileMeta(hash)
+	if err!=nil{
+		fmt.Printf("Failed to get file meta from db，err:%s\n",err.Error())
+		return nil
+	}
+	fmeta := FileMeta{
+		FileName: file.FileName.String,
+		FileSha1: file.FileHash,
+		Location: file.FileAddr.String,
+		FileSize: file.FileSize.Int64,
+	}
+	return &fmeta
 }

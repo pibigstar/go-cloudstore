@@ -3,6 +3,7 @@ package handler
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/pibigstar/go-cloudstore/constant"
 	"github.com/pibigstar/go-cloudstore/meta"
 	"io"
 	"io/ioutil"
@@ -13,20 +14,17 @@ import (
 	"github.com/pibigstar/go-cloudstore/utils"
 )
 
-// 文件上传后的存放路径
-const uploadFilePath = "temp/"
-
 // 处理文件上传
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// GET请求是去上传页面
-	if r.Method == "GET" {
+	if r.Method ==  http.MethodGet  {
 		bytes, err := ioutil.ReadFile("./static/view/index.html")
 		if err != nil {
 			io.WriteString(w, "internal server error")
 			return
 		}
 		io.WriteString(w, string(bytes))
-	} else if r.Method == "POST" {
+	} else if r.Method ==  http.MethodPost {
 		//POST请求是上传文件
 		file, header, err := r.FormFile("file")
 		if err != nil {
@@ -34,19 +32,19 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
-		exist, err := utils.PathExists(uploadFilePath)
+		exist, err := utils.PathExists(cont.UploadFilePath)
 		if !exist {
-			err := os.Mkdir(uploadFilePath, os.ModePerm)
+			err := os.Mkdir(cont.UploadFilePath, os.ModePerm)
 			if err != nil {
 				fmt.Printf("Failed to create file dir, err:%s\n", err.Error())
 				return
 			}
 		}
-		filePath := fmt.Sprintf("%s%s", uploadFilePath, header.Filename)
+		filePath := fmt.Sprintf("%s%s", cont.UploadFilePath, header.Filename)
 		// 文件元数据
 		fileMeta := meta.FileMeta{
 			FileName: header.Filename,
-			FilePath: uploadFilePath,
+			FilePath: cont.UploadFilePath,
 			Location: filePath,
 			UploadAt: utils.FormatTime(),
 		}
@@ -67,7 +65,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		newFile.Seek(0, 0)
 		fileMeta.FileSha1 = utils.FileSha1(newFile)
 		fmt.Println("sha1:",fileMeta.FileSha1)
-		meta.UpdateFileMeta(fileMeta)
+		meta.UpdateFileMetaDB(fileMeta)
 
 		// 重定向路由
 		http.Redirect(w, r, "/file/upload/success", http.StatusFound)
@@ -83,7 +81,7 @@ func UploadSuccessHandler(w http.ResponseWriter, r *http.Request) {
 func GetFileMeta(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	hash := r.Form.Get("filehash")
-	fileMeta := meta.GetFileMeta(hash)
+	fileMeta := meta.GetFileMetaDB(hash)
 	bytes, err := json.Marshal(fileMeta)
 	if err != nil {
 		fmt.Printf("Failed to parse fileMeta,err:%s\n",err.Error())
