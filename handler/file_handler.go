@@ -17,14 +17,14 @@ import (
 // 处理文件上传
 func UploadHandler(w http.ResponseWriter, r *http.Request) {
 	// GET请求是去上传页面
-	if r.Method ==  http.MethodGet  {
+	if r.Method == http.MethodGet {
 		bytes, err := ioutil.ReadFile("./static/view/index.html")
 		if err != nil {
 			io.WriteString(w, "internal server error")
 			return
 		}
 		io.WriteString(w, string(bytes))
-	} else if r.Method ==  http.MethodPost {
+	} else if r.Method == http.MethodPost {
 		//POST请求是上传文件
 		file, header, err := r.FormFile("file")
 		if err != nil {
@@ -64,7 +64,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		// 计算文件的sha1值
 		newFile.Seek(0, 0)
 		fileMeta.FileSha1 = utils.FileSha1(newFile)
-		fmt.Println("sha1:",fileMeta.FileSha1)
+		fmt.Println("sha1:", fileMeta.FileSha1)
 		meta.UpdateFileMetaDB(fileMeta)
 
 		// 重定向路由
@@ -84,20 +84,20 @@ func GetFileMeta(w http.ResponseWriter, r *http.Request) {
 	fileMeta := meta.GetFileMetaDB(hash)
 	bytes, err := json.Marshal(fileMeta)
 	if err != nil {
-		fmt.Printf("Failed to parse fileMeta,err:%s\n",err.Error())
+		fmt.Printf("Failed to parse fileMeta,err:%s\n", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Write(bytes)
 }
 
 // 批量查询文件元数据信息
-func QueryFileHandler(w http.ResponseWriter, r *http.Request)  {
+func QueryFileHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	limit, _ := strconv.Atoi(r.Form.Get("limit"))
 	fileMeta := meta.GetLastFileMeta(limit)
 	bytes, err := json.Marshal(fileMeta)
 	if err != nil {
-		fmt.Printf("Failed to parse fileMeta,err:%s\n",err.Error())
+		fmt.Printf("Failed to parse fileMeta,err:%s\n", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 	w.Write(bytes)
@@ -111,19 +111,19 @@ func DownloadFileHandler(w http.ResponseWriter, r *http.Request) {
 
 	file, err := os.Open(fileMeta.Location)
 	if err != nil {
-		fmt.Printf("Failed to open the file, err:%s\n",err.Error())
+		fmt.Printf("Failed to open the file, err:%s\n", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 
 	bytes, err := ioutil.ReadAll(file)
-	if err!=nil{
-		fmt.Printf("Failed to read the file, err:%s\n",err.Error())
+	if err != nil {
+		fmt.Printf("Failed to read the file, err:%s\n", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
-	w.Header().Set("Content-Type","application/octect-stream")
-	w.Header().Set("Content-Disposition","attachment;filename=\""+fileMeta.FileName+"\"")
+	w.Header().Set("Content-Type", "application/octect-stream")
+	w.Header().Set("Content-Disposition", "attachment;filename=\""+fileMeta.FileName+"\"")
 	w.Write(bytes)
 }
 
@@ -150,7 +150,7 @@ func UpdateFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 
 	err := os.Rename(fileMeta.Location, fileMeta.FilePath+newFileName)
 	if err != nil {
-		fmt.Printf("Failed to rename the file, err:%s\n",err.Error())
+		fmt.Printf("Failed to rename the file, err:%s\n", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
@@ -163,7 +163,7 @@ func UpdateFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(bytes)
 }
 
-func DeleteFileHandler(w http.ResponseWriter, r *http.Request)  {
+func DeleteFileHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	hash := r.Form.Get("filehash")
@@ -171,12 +171,12 @@ func DeleteFileHandler(w http.ResponseWriter, r *http.Request)  {
 	fileMeta := meta.GetFileMeta(hash)
 	err := os.Remove(fileMeta.Location)
 	if err != nil {
-		fmt.Printf("Failed to delete the file, err:%s\n",err.Error())
+		fmt.Printf("Failed to delete the file, err:%s\n", err.Error())
 		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 	// 将此文件从元数据集合中删除
 	meta.RemoveFileMeta(hash)
 
-	io.WriteString(w,"OK!")
+	io.WriteString(w, "OK!")
 }

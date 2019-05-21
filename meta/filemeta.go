@@ -35,26 +35,28 @@ func GetFileMeta(fileSha1 string) FileMeta {
 
 // 返回最后上传的文件元数据
 func GetLastFileMeta(count int) []FileMeta {
-	fMetaArray := make([]FileMeta,len(fileMetes))
-	for _,v := range fileMetes{
+	fMetaArray := make([]FileMeta, len(fileMetes))
+	for _, v := range fileMetes {
 		fMetaArray = append(fMetaArray, v)
 	}
 	sort.Sort(ByUploadTime(fMetaArray))
 	return fMetaArray[0:count]
 }
 
-func RemoveFileMeta(filehash string)  {
-	delete(fileMetes,filehash)
+func RemoveFileMeta(filehash string) {
+	delete(fileMetes, filehash)
 }
+
 // 上传文件后，将文件信息保存到mysql中
-func UpdateFileMetaDB(meta FileMeta) bool{
-	return db.InsertFile(meta.FileSha1,meta.FileName,meta.Location,meta.FileSize)
+func UpdateFileMetaDB(meta FileMeta) bool {
+	return db.InsertFile(meta.FileSha1, meta.FileName, meta.Location, meta.FileSize)
 }
+
 // 从数据库中获取文件元数据
-func GetFileMetaDB(hash string) *FileMeta{
+func GetFileMetaDB(hash string) *FileMeta {
 	file, err := db.GetFileMeta(hash)
-	if err!=nil{
-		fmt.Printf("Failed to get file meta from db，err:%s\n",err.Error())
+	if err != nil {
+		fmt.Printf("Failed to get file meta from db，err:%s\n", err.Error())
 		return nil
 	}
 	fmeta := FileMeta{
