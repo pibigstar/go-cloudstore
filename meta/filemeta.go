@@ -53,11 +53,11 @@ func UpdateFileMetaDB(meta FileMeta) bool {
 }
 
 // 从数据库中获取文件元数据
-func GetFileMetaDB(hash string) (*FileMeta,error) {
+func GetFileMetaDB(hash string) (*FileMeta, error) {
 	file, err := db.GetFileMeta(hash)
 	if err != nil {
 		fmt.Printf("Failed to get file meta from db，err:%s\n", err.Error())
-		return nil,err
+		return nil, err
 	}
 	fmeta := FileMeta{
 		FileName: file.FileName.String,
@@ -65,5 +65,5 @@ func GetFileMetaDB(hash string) (*FileMeta,error) {
 		Location: file.FileAddr.String,
 		FileSize: file.FileSize.Int64,
 	}
-	return &fmeta,nil
+	return &fmeta, nil
 }

@@ -6,6 +6,7 @@ import (
 	"github.com/pibigstar/go-cloudstore/db/mysql"
 )
 
+// 插入文件表
 func InsertFile(filehash, filename, fileaddr string, filesize int64) bool {
 	db := mysql.DBConn()
 	stmt, err := db.Prepare("insert tbl_file set file_sha1=?,file_name=?,file_addr=?,file_size=?,status=?")

@@ -94,4 +94,3 @@ func GetUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	}
 	w.Write(resp.JSONBytes())
 }
-

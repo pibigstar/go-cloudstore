@@ -5,5 +5,5 @@ const (
 	UploadFilePath = "temp/"
 	// 密码盐值
 	PASSWORD_SALT = "sfdjskjfweaflksnfkdjskafjelwhfess"
-	TOKEN_SALT = "dskldfjke8**djsf&&IIdee"
+	TOKEN_SALT    = "dskldfjke8**djsf&&IIdee"
 )

@@ -24,6 +24,6 @@ func FormatTime() string {
 
 // 生成一个40位字符的token
 func GenToken(username string) string {
-	tokenPrefix := MD5([]byte(username+cont.TOKEN_SALT))
+	tokenPrefix := MD5([]byte(username + cont.TOKEN_SALT))
 	return tokenPrefix
 }

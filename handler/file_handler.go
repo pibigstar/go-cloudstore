@@ -76,21 +76,22 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 			// 重定向路由
 			http.Redirect(w, r, "/home", http.StatusFound)
 		} else {
-			io.WriteString(w,"Upload Failed!")
+			io.WriteString(w, "Upload Failed!")
 		}
 	}
 }
+
 // 尝试使用秒传
-func TryFastUploadHandler(w http.ResponseWriter, r *http.Request)  {
+func TryFastUploadHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	username := r.Form.Get("username")
 	filehash := r.Form.Get("filehash")
 	filename := r.Form.Get("filename")
-	filesize, _:= strconv.Atoi(r.Form.Get("filesize"))
+	filesize, _ := strconv.Atoi(r.Form.Get("filesize"))
 
 	// 从文件表中查询相同hash的文件记录
-	fileMeta,err := meta.GetFileMetaDB(filehash)
+	fileMeta, err := meta.GetFileMetaDB(filehash)
 	//TODO: 秒传失败之后应该调用正常上传逻辑
 	if err != nil {
 		w.WriteHeader(http.StatusNotFound)
@@ -100,7 +101,7 @@ func TryFastUploadHandler(w http.ResponseWriter, r *http.Request)  {
 	if fileMeta == nil {
 		resp := utils.RespMsg{
 			Code: -1,
-			Msg: "秒传失败，请访问普通上传接口",
+			Msg:  "秒传失败，请访问普通上传接口",
 		}
 		w.Write(resp.JSONBytes())
 		return
@@ -111,12 +112,12 @@ func TryFastUploadHandler(w http.ResponseWriter, r *http.Request)  {
 	if suc {
 		resp := utils.RespMsg{
 			Code: 0,
-			Msg: "秒传成功",
+			Msg:  "秒传成功",
 		}
 		w.Write(resp.JSONBytes())
 		return
 	} else {
-		io.WriteString(w,"秒传失败")
+		io.WriteString(w, "秒传失败")
 	}
 
 }
@@ -130,7 +131,7 @@ func UploadSuccessHandler(w http.ResponseWriter, r *http.Request) {
 func GetFileMeta(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	hash := r.Form.Get("filehash")
-	fileMeta,err := meta.GetFileMetaDB(hash)
+	fileMeta, err := meta.GetFileMetaDB(hash)
 	bytes, err := json.Marshal(fileMeta)
 	if err != nil {
 		fmt.Printf("Failed to parse fileMeta,err:%s\n", err.Error())
