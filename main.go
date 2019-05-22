@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/pibigstar/go-cloudstore/middleware"
 	"log"
 	"net/http"
 
@@ -18,7 +19,8 @@ func main() {
 	http.HandleFunc("/file/delete", handler.DeleteFileHandler)
 	http.HandleFunc("/user/signup", handler.UserSignupHandler)
 	http.HandleFunc("/user/signin", handler.UserLoginHandler)
-	http.HandleFunc("/user/info", handler.GetUserInfoHandler)
+	// 添加了拦截器
+	http.HandleFunc("/user/info", middleware.HttpInterceptor(handler.GetUserInfoHandler))
 	http.HandleFunc("/home", handler.GoHomeHandler)
 
 	// 静态资源配置

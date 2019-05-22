@@ -54,7 +54,7 @@ func UserLogin(username string, password string) (*TableUser, error) {
 }
 
 func UpdateUserToken(username, token string) bool {
-	stmt, err := mysql.DBConn().Prepare("insert tbl_user_token set user_name=?,user_token=?")
+	stmt, err := mysql.DBConn().Prepare("replace tbl_user_token set user_name=?,user_token=?")
 	if err != nil {
 		fmt.Printf("Failed to prepare sql,err:%s\n", err.Error())
 		return false

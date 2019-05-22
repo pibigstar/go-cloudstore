@@ -9,7 +9,6 @@ import (
 	"io"
 	"io/ioutil"
 	"net/http"
-	"time"
 )
 
 // 用户注册
@@ -28,7 +27,7 @@ func UserSignupHandler(w http.ResponseWriter, r *http.Request) {
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
 
-		enc_pwd := utils.Sha1([]byte(password + cont.SALT))
+		enc_pwd := utils.Sha1([]byte(password + cont.PASSWORD_SALT))
 		b := db.UserSignup(username, enc_pwd)
 		if b {
 			io.WriteString(w, "Success!")
@@ -56,13 +55,13 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	} else if r.Method == http.MethodPost {
 		username := r.Form.Get("username")
 		password := r.Form.Get("password")
-		enc_pwd := utils.Sha1([]byte(password + cont.SALT))
+		enc_pwd := utils.Sha1([]byte(password + cont.PASSWORD_SALT))
 		_, err := db.UserLogin(username, enc_pwd)
 		if err != nil {
 			io.WriteString(w, "Failed！")
 			return
 		}
-		token := GenToken(username)
+		token := utils.GenToken(username)
 		db.UpdateUserToken(username, token)
 		response := LoginResponse{
 			Location: fmt.Sprintf("http://%s/static/view/home.html", r.Host),
@@ -79,22 +78,9 @@ func UserLoginHandler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// 生成一个40位字符的token
-func GenToken(username string) string {
-	t := fmt.Sprintf("%x", time.Now().Unix())
-	tokenPrefix := utils.MD5([]byte(username + t))
-	return tokenPrefix + t[:8]
-}
-
 func GetUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	token := r.Form.Get("token")
 	username := r.Form.Get("username")
-	if !checkToken(token) {
-		io.WriteString(w, "token is invalid")
-		w.WriteHeader(http.StatusForbidden)
-		return
-	}
 
 	user, err := db.GetUserInfo(username)
 	if err != nil {
@@ -109,6 +95,3 @@ func GetUserInfoHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write(resp.JSONBytes())
 }
 
-func checkToken(token string) bool {
-	return true
-}
