@@ -11,6 +11,7 @@ import (
 
 func main() {
 	http.HandleFunc("/file/upload", handler.UploadHandler)
+	http.HandleFunc("/file/fastupload", handler.TryFastUploadHandler)
 	http.HandleFunc("/file/upload/success", handler.UploadSuccessHandler)
 	http.HandleFunc("/file/meta", handler.GetFileMeta)
 	http.HandleFunc("/file/query", handler.QueryFileHandler)
