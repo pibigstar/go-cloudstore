@@ -1,18 +1,22 @@
 package handler
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/pibigstar/go-cloudstore/config"
 	"github.com/pibigstar/go-cloudstore/constant"
 	"github.com/pibigstar/go-cloudstore/db"
 	"github.com/pibigstar/go-cloudstore/meta"
+	"github.com/pibigstar/go-cloudstore/mq"
+	"github.com/pibigstar/go-cloudstore/store/oss"
+	"github.com/pibigstar/go-cloudstore/utils"
 	"io"
 	"io/ioutil"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
-
-	"github.com/pibigstar/go-cloudstore/utils"
 )
 
 // 处理文件上传
@@ -33,6 +37,13 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		defer file.Close()
+		// 2. 把文件内容转为[]byte
+		buf := bytes.NewBuffer(nil)
+		if _, err := io.Copy(buf, file); err != nil {
+			log.Printf("Failed to get file data, err:%s\n", err.Error())
+			return
+		}
+		// 判断临时上传本地路径是否存在
 		exist, err := utils.PathExists(cont.UploadFilePath)
 		if !exist {
 			err := os.Mkdir(cont.UploadFilePath, os.ModePerm)
@@ -45,31 +56,67 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		// 文件元数据
 		fileMeta := meta.FileMeta{
 			FileName: header.Filename,
+			FileSha1: utils.Sha1(buf.Bytes()),
+			FileSize: int64(len(buf.Bytes())),
 			FilePath: cont.UploadFilePath,
 			Location: filePath,
 			UploadAt: utils.FormatTime(),
 		}
+		fmt.Println("file sha1:", fileMeta.FileSha1)
+
 		// 创建一个新文件
 		newFile, err := os.Create(fileMeta.Location)
 		if err != nil {
 			fmt.Printf("Failed to create new file, err:%s\n", err.Error())
 			return
 		}
-		defer newFile.Close()
+		//defer newFile.Close()
 		// 将上传的文件内容复制到新文件中
-		fileMeta.FileSize, err = io.Copy(newFile, file)
-		if err != nil {
-			fmt.Printf("Failed to save data into file, err:%s\n", err.Error())
+		nByte, err := newFile.Write(buf.Bytes())
+		if int64(nByte) != fileMeta.FileSize || err != nil {
+			log.Printf("Failed to save data into file, writtenSize:%d, err:%s\n", nByte, err.Error())
 			return
 		}
-		// 计算文件的sha1值
+		// 将文件上传到OSS中
+		// 游标重新回到文件头部
 		newFile.Seek(0, 0)
-		fileMeta.FileSha1 = utils.FileSha1(newFile)
-		fmt.Println("sha1:", fileMeta.FileSha1)
+		ossPath := config.OSSRootDir + fileMeta.FileSha1
+		if !config.AsyncTransferEnable {
+			// 同步
+			err = oss.Bucket().PutObject(ossPath, newFile)
+			if err != nil {
+				log.Println(err.Error())
+				return
+			}
+			fileMeta.Location = ossPath
+		} else {
+			// 写入异步转移任务队列
+			data := mq.TransferData{
+				FileHash:      fileMeta.FileSha1,
+				CurLocation:   fileMeta.Location,
+				DestLocation:  ossPath,
+				DestStoreType: config.StoreOSS,
+			}
+			pubData, err := json.Marshal(data)
+			if err != nil {
+				log.Printf("Failed to marsha1 transfer data,err:%s\n",err.Error())
+				return
+			}
+			pubSuc := mq.Publish(
+				config.TransExchangeName,
+				config.TransOSSRoutingKey,
+				pubData,
+			)
+			if !pubSuc {
+				// TODO: 当前发送转移信息失败，稍后重试
+				fmt.Println("失败")
+			}
+		}
+
+		// 将文件信息保存到mysql中
 		meta.UpdateFileMetaDB(fileMeta)
 
 		//更新用户文件表记录
-
 		username := r.Form.Get("username")
 		suc := db.CreateUserFile(username, fileMeta.FileSha1, fileMeta.FileName, int(fileMeta.FileSize))
 		if suc {

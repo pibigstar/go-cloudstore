@@ -10,9 +10,9 @@ import (
 	"strings"
 	"time"
 
+	goRedis "github.com/gomodule/redigo/redis"
 	"github.com/pibigstar/go-cloudstore/db/redis"
 	"github.com/pibigstar/go-cloudstore/utils"
-	goRedis "github.com/gomodule/redigo/redis"
 )
 
 // 分块上传Handler
@@ -26,7 +26,7 @@ type MultipartUploadInfo struct {
 }
 
 const (
-	ChunkSize = 5 * 1024 * 1024
+	ChunkSize    = 5 * 1024 * 1024
 	ChunkDataDIR = "D://data/"
 )
 
@@ -80,29 +80,30 @@ func UploadPartHandler(w http.ResponseWriter, r *http.Request) {
 
 	// 获取文件句柄，用户存储分块内容
 	filePath := ChunkDataDIR + uploadID + "/" + chunkIndex
-	os.MkdirAll(filePath,0744)
+	os.MkdirAll(filePath, 0744)
 	file, err := os.Create(filePath)
 	if err != nil {
-		w.Write(utils.NewRespMsg(-1,"upload part failed",nil).JSONBytes())
+		w.Write(utils.NewRespMsg(-1, "upload part failed", nil).JSONBytes())
 		return
 	}
 	defer file.Close()
 	buff := make([]byte, 1024*1024)
 	for {
 		n, err := r.Body.Read(buff)
-		if err!=nil{
+		if err != nil {
 			break
 		}
 		file.Write(buff[:n])
 	}
 	// 更新redis缓存状态
-	rConn.Do("HSET","MP_"+uploadID,"chkidx_"+chunkIndex,1)
+	rConn.Do("HSET", "MP_"+uploadID, "chkidx_"+chunkIndex, 1)
 
 	// 返回客户端
-	w.Write(utils.NewRespMsg(0,"OK",nil).JSONBytes())
+	w.Write(utils.NewRespMsg(0, "OK", nil).JSONBytes())
 }
+
 // 上传合并
-func CompleteUploadHandler(w http.ResponseWriter, r *http.Request)  {
+func CompleteUploadHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 
 	username := r.Form.Get("username")
@@ -116,27 +117,27 @@ func CompleteUploadHandler(w http.ResponseWriter, r *http.Request)  {
 
 	values, err := goRedis.Values(rConn.Do("HGETALL", "MP_"+uploadid))
 	if err != nil {
-		w.Write(utils.NewRespMsg(-1,"complete upload failed",nil).JSONBytes())
+		w.Write(utils.NewRespMsg(-1, "complete upload failed", nil).JSONBytes())
 		return
 	}
 	totalCount := 0
 	chunkCount := 0
-	for i:=0;i<len(values);i+=2 {
+	for i := 0; i < len(values); i += 2 {
 		k := string(values[i].([]byte))
 		v := string(values[i+1].([]byte))
 		if k == "chunkcount" {
 			totalCount, _ = strconv.Atoi(v)
-		}else if strings.HasPrefix(k,"chkidx_") && v =="1"{
-			chunkCount+=1
+		} else if strings.HasPrefix(k, "chkidx_") && v == "1" {
+			chunkCount += 1
 		}
 	}
-	if totalCount!=chunkCount {
-		w.Write(utils.NewRespMsg(-1,"invalid request",nil).JSONBytes())
+	if totalCount != chunkCount {
+		w.Write(utils.NewRespMsg(-1, "invalid request", nil).JSONBytes())
 		return
 	}
 	// 更新文件表和用户文件表
-	db.InsertFile(filehash,filename,"",int64(filesize))
-	db.CreateUserFile(username,filehash,filename,filesize)
+	db.InsertFile(filehash, filename, "", int64(filesize))
+	db.CreateUserFile(username, filehash, filename, filesize)
 
-	w.Write(utils.NewRespMsg(0,"ok",nil).JSONBytes())
+	w.Write(utils.NewRespMsg(0, "ok", nil).JSONBytes())
 }

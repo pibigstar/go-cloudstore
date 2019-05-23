@@ -31,8 +31,6 @@ func main() {
 	http.HandleFunc("/user/info", middleware.HttpInterceptor(handler.GetUserInfoHandler))
 	http.HandleFunc("/home", handler.GoHomeHandler)
 
-
-
 	// 静态资源配置
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
