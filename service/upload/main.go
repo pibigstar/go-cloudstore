@@ -2,8 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/pibigstar/go-cloudstore/middleware"
-	"log"
+	"github.com/pibigstar/go-cloudstore/route"
 	"net/http"
 
 	"github.com/pibigstar/go-cloudstore/handler"
@@ -26,10 +25,6 @@ func main() {
 	http.HandleFunc("/file/mpupload/complete", handler.CompleteUploadHandler)
 
 	// 用户相关接口
-	http.HandleFunc("/user/signup", handler.UserSignupHandler)
-	http.HandleFunc("/user/signin", handler.UserLoginHandler)
-	// 添加了拦截器
-	http.HandleFunc("/user/info", middleware.HttpInterceptor(handler.GetUserInfoHandler))
 	http.HandleFunc("/home", handler.GoHomeHandler)
 
 	// 静态资源配置
@@ -37,8 +32,7 @@ func main() {
 
 	fmt.Println("server is started...")
 
-	err := http.ListenAndServe(":8080", nil)
-	if err != nil {
-		log.Fatal("starter server error")
-	}
+
+	router := route.Router()
+	router.Run(":8080")
 }

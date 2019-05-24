@@ -1,22 +1,25 @@
 package middleware
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/pibigstar/go-cloudstore/utils"
 	"net/http"
 )
 
 // http请求拦截器
-func HttpInterceptor(f http.HandlerFunc) http.HandlerFunc {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		r.ParseForm()
-		username := r.Form.Get("username")
-		token := r.Form.Get("token")
+func HttpInterceptor() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		username := c.Request.FormValue("username")
+		token := c.Request.FormValue("token")
 		if !checkToken(username, token) {
-			w.WriteHeader(http.StatusForbidden)
+			//终止此请求链
+			c.Abort()
+			resp := utils.NewRespMsg(http.StatusForbidden,"token无效",nil)
+			c.JSON(http.StatusOK,resp)
 			return
 		}
-		f(w, r)
-	})
+		c.Next()
+	}
 }
 
 func checkToken(username, token string) bool {
