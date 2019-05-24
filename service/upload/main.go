@@ -16,6 +16,7 @@ func main() {
 	http.HandleFunc("/file/meta", handler.GetFileMeta)
 	http.HandleFunc("/file/query", handler.QueryFileHandler)
 	http.HandleFunc("/file/download", handler.DownloadFileHandler)
+	http.HandleFunc("/file/downloadurl", handler.DownloadFileByUrlHandler)
 	http.HandleFunc("/file/update", handler.UpdateFileMetaHandler)
 	http.HandleFunc("/file/delete", handler.DeleteFileHandler)
 
@@ -35,6 +36,7 @@ func main() {
 	http.Handle("/static/", http.StripPrefix("/static/", http.FileServer(http.Dir("./static"))))
 
 	fmt.Println("server is started...")
+
 	err := http.ListenAndServe(":8080", nil)
 	if err != nil {
 		log.Fatal("starter server error")

@@ -9,7 +9,6 @@ import (
 )
 
 func main() {
-
 	log.Println("开启监听任务队列....")
 	mq.StartConsume(config.TransOSSQueueName, "transfer_oss", process.ProcessTransfer)
 }

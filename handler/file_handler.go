@@ -81,6 +81,8 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 		// 游标重新回到文件头部
 		newFile.Seek(0, 0)
 		ossPath := config.OSSRootDir + fileMeta.FileSha1
+		fileMeta.Location = ossPath
+
 		if !config.AsyncTransferEnable {
 			// 同步
 			err = oss.Bucket().PutObject(ossPath, newFile)
@@ -93,7 +95,7 @@ func UploadHandler(w http.ResponseWriter, r *http.Request) {
 			// 写入异步转移任务队列
 			data := mq.TransferData{
 				FileHash:      fileMeta.FileSha1,
-				CurLocation:   fileMeta.Location,
+				CurLocation:   filePath,
 				DestLocation:  ossPath,
 				DestStoreType: config.StoreOSS,
 			}
@@ -229,6 +231,22 @@ func DownloadFileHandler(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Disposition", "attachment;filename=\""+fileMeta.FileName+"\"")
 	w.Write(bytes)
 }
+
+func DownloadFileByUrlHandler(w http.ResponseWriter, r *http.Request) {
+	r.ParseForm()
+
+	hash := r.Form.Get("filehash")
+	fileMeta,err := meta.GetFileMetaDB(hash)
+	if err != nil {
+		log.Println(err.Error())
+		return
+	}
+	url := oss.DownloadURL(fileMeta.Location)
+	fmt.Println(url)
+	io.WriteString(w,url)
+}
+
+
 
 func UpdateFileMetaHandler(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
