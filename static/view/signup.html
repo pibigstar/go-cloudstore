@@ -94,7 +94,7 @@
         alert(JSON.stringify(err));
       },
       success: function (resp) {
-        if (resp.code == 10000) {
+        if (resp.code == 200) {
           alert("注册成功");
           window.location.href = "/user/signin";
         } else {

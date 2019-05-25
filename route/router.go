@@ -6,11 +6,11 @@ import (
 	"github.com/pibigstar/go-cloudstore/middleware"
 )
 
-func Router() *gin.Engine  {
+func Router() *gin.Engine {
 
 	router := gin.Default()
 	// 处理静态资源
-	router.Static("/static/","./static")
+	router.Static("/static/", "./static")
 
 	//无需验证
 	router.GET("/user/signup", handler.ToUserSignupHandler)
@@ -21,7 +21,6 @@ func Router() *gin.Engine  {
 	//添加拦截器, Use之后的所有Handler都会经过拦截器校验
 	router.Use(middleware.HttpInterceptor())
 	router.POST("user/info", handler.GetUserInfoHandler)
-
 
 	router.GET("/home", handler.GoHomeHandler)
 	//上传相关接口

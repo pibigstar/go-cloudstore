@@ -63,7 +63,7 @@ func InitialMultipartUploadHandler(c *gin.Context) {
 		Msg:  "OK",
 		Data: uploadInfo,
 	}
-	c.Data(http.StatusOK,"application/json",resp.JSONBytes())
+	c.Data(http.StatusOK, "application/json", resp.JSONBytes())
 }
 
 // 上传文件分块
@@ -82,9 +82,9 @@ func UploadPartHandler(c *gin.Context) {
 	os.MkdirAll(filePath, 0744)
 	file, err := os.Create(filePath)
 	if err != nil {
-		c.JSON(http.StatusInternalServerError,gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": -1,
-			"msg": "upload part failed",
+			"msg":  "upload part failed",
 		})
 		return
 	}
@@ -102,7 +102,7 @@ func UploadPartHandler(c *gin.Context) {
 
 	// 返回客户端
 	c.JSON(http.StatusOK, gin.H{
-		"msg": "OK!",
+		"msg":  "OK!",
 		"code": 0,
 	})
 }
@@ -121,9 +121,9 @@ func CompleteUploadHandler(c *gin.Context) {
 
 	values, err := goRedis.Values(rConn.Do("HGETALL", "MP_"+uploadid))
 	if err != nil {
-		c.JSON(http.StatusInternalServerError,gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": 0,
-			"msg": "complete upload failed",
+			"msg":  "complete upload failed",
 		})
 		return
 	}
@@ -139,9 +139,9 @@ func CompleteUploadHandler(c *gin.Context) {
 		}
 	}
 	if totalCount != chunkCount {
-		c.JSON(http.StatusInternalServerError,gin.H{
+		c.JSON(http.StatusInternalServerError, gin.H{
 			"code": -1,
-			"msg": "invalid request",
+			"msg":  "invalid request",
 		})
 		return
 	}
@@ -149,8 +149,8 @@ func CompleteUploadHandler(c *gin.Context) {
 	db.InsertFile(filehash, filename, "", int64(filesize))
 	db.CreateUserFile(username, filehash, filename, filesize)
 
-	c.JSON(http.StatusOK,gin.H{
+	c.JSON(http.StatusOK, gin.H{
 		"code": 0,
-		"msg": "OK",
+		"msg":  "OK",
 	})
 }

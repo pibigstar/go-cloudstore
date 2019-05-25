@@ -22,9 +22,10 @@ import (
 )
 
 // 去上传页面
-func ToUploadHandler(c *gin.Context)  {
+func ToUploadHandler(c *gin.Context) {
 	c.Redirect(http.StatusFound, "static/view/upload.html")
 }
+
 // 处理文件上传
 func DoUploadHandler(c *gin.Context) {
 	//POST请求是上传文件
@@ -98,7 +99,7 @@ func DoUploadHandler(c *gin.Context) {
 		}
 		pubData, err := json.Marshal(data)
 		if err != nil {
-			log.Printf("Failed to marsha1 transfer data,err:%s\n",err.Error())
+			log.Printf("Failed to marsha1 transfer data,err:%s\n", err.Error())
 			return
 		}
 		pubSuc := mq.Publish(
@@ -120,10 +121,10 @@ func DoUploadHandler(c *gin.Context) {
 	suc := db.CreateUserFile(username, fileMeta.FileSha1, fileMeta.FileName, int(fileMeta.FileSize))
 	if suc {
 		// 重定向路由
-		c.Redirect(http.StatusFound,"/static/view/home.html")
+		c.Redirect(http.StatusFound, "/static/view/home.html")
 	} else {
-		c.JSON(http.StatusOK,gin.H{
-			"msg": "Upload Failed!",
+		c.JSON(http.StatusOK, gin.H{
+			"msg":  "Upload Failed!",
 			"code": -1,
 		})
 	}
@@ -150,7 +151,7 @@ func TryFastUploadHandler(c *gin.Context) {
 			Code: -1,
 			Msg:  "秒传失败，请访问普通上传接口",
 		}
-		c.JSON(http.StatusOK,resp)
+		c.JSON(http.StatusOK, resp)
 		return
 	}
 
@@ -161,11 +162,11 @@ func TryFastUploadHandler(c *gin.Context) {
 			Code: 0,
 			Msg:  "秒传成功",
 		}
-		c.JSON(http.StatusOK,resp)
+		c.JSON(http.StatusOK, resp)
 		return
 	} else {
-		c.JSON(http.StatusOK,gin.H{
-			"msg": "秒传失败",
+		c.JSON(http.StatusOK, gin.H{
+			"msg":  "秒传失败",
 			"code": -1,
 		})
 	}
@@ -181,7 +182,7 @@ func GetFileMeta(c *gin.Context) {
 		fmt.Printf("Failed to parse fileMeta,err:%s\n", err.Error())
 		c.Status(http.StatusInternalServerError)
 	}
-	c.Data(http.StatusOK,"application/json",bytes)
+	c.Data(http.StatusOK, "application/json", bytes)
 }
 
 // 批量查询文件元数据信息
@@ -200,29 +201,30 @@ func QueryFileHandler(c *gin.Context) {
 		fmt.Printf("Failed to parse fileMeta,err:%s\n", err.Error())
 		c.Status(http.StatusInternalServerError)
 	}
-	c.Data(http.StatusOK,"application/json",bytes)
+	c.Data(http.StatusOK, "application/json", bytes)
 }
+
 // 下载文件
 func DownloadFileHandler(c *gin.Context) {
 
 	hash := c.Request.FormValue("filehash")
-	fileMeta,err := meta.GetFileMetaDB(hash)
-	if err!= nil {
+	fileMeta, err := meta.GetFileMetaDB(hash)
+	if err != nil {
 		c.Status(http.StatusInternalServerError)
 	}
 	// 从oss中下载
-	if strings.HasPrefix(fileMeta.Location, config.OSSRootDir){
+	if strings.HasPrefix(fileMeta.Location, config.OSSRootDir) {
 		hash := c.Request.FormValue("filehash")
-		fileMeta,err := meta.GetFileMetaDB(hash)
+		fileMeta, err := meta.GetFileMetaDB(hash)
 		if err != nil {
 			log.Println(err.Error())
 			return
 		}
 		url := oss.DownloadURL(fileMeta.Location)
 		fmt.Println(url)
-		c.JSON(http.StatusOK,gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"code": 0,
-			"msg": url,
+			"msg":  url,
 		})
 	} else {
 		//从本地下载
@@ -258,14 +260,14 @@ func UpdateFileMetaHandler(c *gin.Context) {
 	}
 	b := db.RenameFile(hash, newFileName)
 	if !b {
-		c.JSON(http.StatusOK,gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
-			"msg": "更新失败",
+			"msg":  "更新失败",
 		})
 	} else {
-		c.JSON(http.StatusOK,gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"code": 0,
-			"msg": "OK",
+			"msg":  "OK",
 		})
 	}
 }
@@ -284,8 +286,8 @@ func DeleteFileHandler(c *gin.Context) {
 	// 将此文件从元数据集合中删除
 	meta.RemoveFileMeta(hash)
 
-	c.JSON(http.StatusOK,gin.H{
-		"msg": "OK!",
+	c.JSON(http.StatusOK, gin.H{
+		"msg":  "OK!",
 		"code": 0,
 	})
 }

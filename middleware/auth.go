@@ -14,8 +14,8 @@ func HttpInterceptor() gin.HandlerFunc {
 		if !checkToken(username, token) {
 			//终止此请求链
 			c.Abort()
-			resp := utils.NewRespMsg(http.StatusForbidden,"token无效",nil)
-			c.JSON(http.StatusOK,resp)
+			resp := utils.NewRespMsg(http.StatusForbidden, "token无效", nil)
+			c.JSON(http.StatusOK, resp)
 			return
 		}
 		c.Next()

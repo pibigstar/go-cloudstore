@@ -9,24 +9,25 @@ import (
 )
 
 // 去注册页面
-func ToUserSignupHandler(c *gin.Context)  {
+func ToUserSignupHandler(c *gin.Context) {
 	c.Redirect(http.StatusFound, "/static/view/signup.html")
 }
+
 // 用户注册
-func DoUserSignupHandler(c *gin.Context){
+func DoUserSignupHandler(c *gin.Context) {
 	username := c.Request.FormValue("username")
 	password := c.Request.FormValue("password")
 
 	enc_pwd := utils.Sha1([]byte(password + cont.PASSWORD_SALT))
 	b := db.UserSignup(username, enc_pwd)
 	if b {
-		c.JSON(http.StatusOK,gin.H{
-			"msg": "Success",
+		c.JSON(http.StatusOK, gin.H{
+			"msg":  "Success",
 			"code": 0,
 		})
 	} else {
-		c.JSON(http.StatusOK,gin.H{
-			"msg": "Fail",
+		c.JSON(http.StatusOK, gin.H{
+			"msg":  "Fail",
 			"code": -1,
 		})
 	}
@@ -40,10 +41,11 @@ type LoginResponse struct {
 
 // 去用户登录页面
 func ToUserLoginHandler(c *gin.Context) {
-	c.Redirect(http.StatusFound,"/static/view/signin.html")
+	c.Redirect(http.StatusFound, "/static/view/signin.html")
 }
+
 // 处理用户登录请求
-func DoUserLoginHandler(c *gin.Context)  {
+func DoUserLoginHandler(c *gin.Context) {
 	username := c.Request.FormValue("username")
 	password := c.Request.FormValue("password")
 	enc_pwd := utils.Sha1([]byte(password + cont.PASSWORD_SALT))
@@ -51,7 +53,7 @@ func DoUserLoginHandler(c *gin.Context)  {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
-			"msg": "Login Failed!",
+			"msg":  "Login Failed!",
 		})
 		return
 	}
@@ -67,7 +69,7 @@ func DoUserLoginHandler(c *gin.Context)  {
 		Msg:  "OK",
 		Data: response,
 	}
-	c.Data(http.StatusOK, "application/json",resp.JSONBytes())
+	c.Data(http.StatusOK, "application/json", resp.JSONBytes())
 }
 
 func GetUserInfoHandler(c *gin.Context) {
@@ -77,7 +79,7 @@ func GetUserInfoHandler(c *gin.Context) {
 	if err != nil {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
-			"msg": "get user info failed!",
+			"msg":  "get user info failed!",
 		})
 		return
 	}
