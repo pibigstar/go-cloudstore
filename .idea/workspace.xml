@@ -3,16 +3,10 @@
   <component name="ChangeListManager">
     <list default="true" id="e8fa8e3b-efd4-433d-941e-8995bc499448" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/db/file.go" beforeDir="false" afterPath="$PROJECT_DIR$/db/file.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/handler/file_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/file_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/home_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/home_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/mpupload_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/mpupload_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/handler/user_handler.go" beforeDir="false" afterPath="$PROJECT_DIR$/handler/user_handler.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/meta/filemeta.go" beforeDir="false" afterPath="$PROJECT_DIR$/meta/filemeta.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/route/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/route/router.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/service/upload/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/upload/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/static/view/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/view/home.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go" beforeDir="false" afterPath="$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/static/view/upload.html" beforeDir="false" afterPath="$PROJECT_DIR$/static/view/upload.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/static/view/upload2.html" beforeDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -72,10 +66,10 @@
         <counts>
           <entry key="css" value="1" />
           <entry key="gitignore" value="1" />
-          <entry key="go" value="87" />
-          <entry key="html" value="11" />
+          <entry key="go" value="90" />
+          <entry key="html" value="13" />
           <entry key="jpg" value="1" />
-          <entry key="js" value="3" />
+          <entry key="js" value="5" />
           <entry key="md" value="1" />
           <entry key="png" value="1" />
           <entry key="sql" value="4" />
@@ -87,10 +81,10 @@
         <counts>
           <entry key="CSS" value="1" />
           <entry key="Database Element" value="1" />
-          <entry key="Go" value="87" />
-          <entry key="HTML" value="11" />
+          <entry key="Go" value="90" />
+          <entry key="HTML" value="13" />
           <entry key="Image" value="2" />
-          <entry key="JavaScript" value="3" />
+          <entry key="JavaScript" value="5" />
           <entry key="Markdown" value="1" />
           <entry key="PLAIN_TEXT" value="1" />
           <entry key="SQL" value="3" />
@@ -101,16 +95,16 @@
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="gitignore" value="6" />
-          <entry key="go" value="16305" />
-          <entry key="html" value="157" />
+          <entry key="go" value="16346" />
+          <entry key="html" value="355" />
           <entry key="md" value="69" />
           <entry key="txt" value="10" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="Go" value="16305" />
-          <entry key="HTML" value="157" />
+          <entry key="Go" value="16346" />
+          <entry key="HTML" value="355" />
           <entry key="Markdown" value="69" />
           <entry key="PLAIN_TEXT" value="16" />
         </counts>
@@ -136,11 +130,32 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/handler/user_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="42" column="34" selection-start-line="42" selection-start-column="34" selection-end-line="42" selection-end-column="34" />
+            <state relative-caret-position="-275">
+              <caret line="16" column="47" lean-forward="true" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/service/transfer/main.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="300">
+              <caret line="12" column="16" lean-forward="true" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
+              <folding>
+                <element signature="e#14#181#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/mq/consumer.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="175">
+              <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
             </state>
           </provider>
         </entry>
@@ -148,8 +163,49 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/route/router.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="230">
-              <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+            <state relative-caret-position="105">
+              <caret line="15" column="42" lean-forward="true" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="122">
+              <caret line="21" column="32" lean-forward="true" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
+              <folding>
+                <element signature="e#17#163#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/view/upload.html">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="103">
+              <caret line="30" column="65" selection-start-line="30" selection-start-column="65" selection-end-line="30" selection-end-column="65" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/js/fileinput.min.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <folding>
+                <element signature="n#!!doc" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/js/auth.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="9" selection-start-column="9" selection-end-column="9" />
             </state>
           </provider>
         </entry>
@@ -157,40 +213,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/handler/file_handler.go">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="155">
-              <caret line="235" column="18" lean-forward="true" selection-start-line="235" selection-start-column="18" selection-end-line="235" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/static/view/home.html">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="636">
-              <caret line="173" column="7" lean-forward="true" selection-start-line="173" selection-start-column="7" selection-end-line="173" selection-end-column="7" />
-              <folding>
-                <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
-                <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/db/file.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="186">
-              <caret line="59" column="5" lean-forward="true" selection-start-line="59" selection-start-column="5" selection-end-line="59" selection-end-column="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/db/userfile.go">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="66">
-              <caret line="12" column="21" lean-forward="true" selection-start-line="12" selection-start-column="21" selection-end-line="12" selection-end-column="21" />
+            <state relative-caret-position="230">
+              <caret line="127" column="10" lean-forward="true" selection-start-line="127" selection-start-column="10" selection-end-line="127" selection-end-column="10" />
             </state>
           </provider>
         </entry>
@@ -252,7 +276,6 @@
         <option value="$PROJECT_DIR$/config/store.go" />
         <option value="$PROJECT_DIR$/mq/define.go" />
         <option value="$PROJECT_DIR$/config/oss.go" />
-        <option value="$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go" />
         <option value="$PROJECT_DIR$/service/transfer/main.go" />
         <option value="$PROJECT_DIR$/middleware/auth.go" />
         <option value="$PROJECT_DIR$/handler/home_handler.go" />
@@ -261,10 +284,12 @@
         <option value="$PROJECT_DIR$/static/view/upload.html" />
         <option value="$PROJECT_DIR$/meta/filemeta.go" />
         <option value="$PROJECT_DIR$/db/file.go" />
-        <option value="$PROJECT_DIR$/handler/file_handler.go" />
         <option value="$PROJECT_DIR$/route/router.go" />
         <option value="$PROJECT_DIR$/static/view/home.html" />
         <option value="$PROJECT_DIR$/handler/user_handler.go" />
+        <option value="$PROJECT_DIR$/static/view/upload2.html" />
+        <option value="$PROJECT_DIR$/handler/file_handler.go" />
+        <option value="$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go" />
       </list>
     </option>
   </component>
@@ -318,19 +343,20 @@
             <path>
               <item name="go-cloudstore" type="b2602c69:ProjectViewProjectNode" />
               <item name="go-cloudstore" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go-cloudstore" type="b2602c69:ProjectViewProjectNode" />
               <item name="go-cloudstore" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="js" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="transfer" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go-cloudstore" type="b2602c69:ProjectViewProjectNode" />
               <item name="go-cloudstore" type="462c0819:PsiDirectoryNode" />
-              <item name="static" type="462c0819:PsiDirectoryNode" />
-              <item name="view" type="462c0819:PsiDirectoryNode" />
+              <item name="service" type="462c0819:PsiDirectoryNode" />
+              <item name="transfer" type="462c0819:PsiDirectoryNode" />
+              <item name="process" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="go-cloudstore" type="b2602c69:ProjectViewProjectNode" />
@@ -378,7 +404,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Go Build.go build main.go (2)">
+  <component name="RunManager" selected="Go Build.go build main.go (1)">
     <configuration name="go build main.go (1)" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="go-cloudstore" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -423,8 +449,8 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build main.go (2)" />
         <item itemvalue="Go Build.go build main.go (1)" />
+        <item itemvalue="Go Build.go build main.go (2)" />
         <item itemvalue="Go Build.go build test_mpupload.go" />
         <item itemvalue="Go Build.go build main.go" />
       </list>
@@ -434,12 +460,12 @@
     <frame x="-7" y="-7" width="1550" height="838" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1816354" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1816354" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32907802" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.3106383" />
+      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.3106383" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.50212765" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -665,13 +691,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/mq/consumer.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="82">
-          <caret line="18" column="30" selection-start-line="18" selection-start-column="30" selection-end-line="18" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/css/bootstrap.min.css">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
@@ -679,16 +698,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="31450">
           <caret line="1279" column="18" selection-start-line="1279" selection-start-column="18" selection-end-line="1279" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="197">
-          <caret line="24" column="19" selection-start-line="24" selection-start-column="19" selection-end-line="24" selection-end-column="19" />
-          <folding>
-            <element signature="e#17#163#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -713,15 +722,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/fileinput.min.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <folding>
-            <element signature="n#!!doc" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$APPLICATION_HOME_DIR$/plugins/JavaScriptLanguage/jsLanguageServicesImpl/external/lib.dom.d.ts">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="146">
@@ -733,23 +733,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="575">
           <caret line="23" column="7" lean-forward="true" selection-start-line="23" selection-start-column="7" selection-end-line="23" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/service/transfer/main.go">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="225">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#14#181#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/js/auth.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
-          <caret line="8" column="31" lean-forward="true" selection-start-line="8" selection-start-column="31" selection-end-line="8" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -767,30 +750,73 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/view/upload2.html">
+    <entry file="file://$PROJECT_DIR$/meta/filemeta.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="366">
-          <caret line="56" lean-forward="true" selection-start-line="56" selection-end-line="56" />
+        <state relative-caret-position="130">
+          <caret line="49" column="15" lean-forward="true" selection-start-line="49" selection-start-column="15" selection-end-line="49" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/view/home.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="186">
+          <caret line="155" column="54" lean-forward="true" selection-start-line="155" selection-start-column="54" selection-end-line="155" selection-end-column="54" />
+          <folding>
+            <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
+            <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/fileinput.min.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <folding>
+            <element signature="n#!!doc" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/js/auth.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="9" selection-start-column="9" selection-end-column="9" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/view/upload.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1475">
-          <caret line="59" column="54" lean-forward="true" selection-start-line="59" selection-start-column="54" selection-end-line="59" selection-end-column="54" />
-          <folding>
-            <element signature="n#style#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#0;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#div#1;n#div#0;n#body#0;n#html#0;n#!!top" expanded="true" />
-          </folding>
+        <state relative-caret-position="103">
+          <caret line="30" column="65" selection-start-line="30" selection-start-column="65" selection-end-line="30" selection-end-column="65" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/meta/filemeta.go">
+    <entry file="file://$PROJECT_DIR$/route/router.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="49" column="15" lean-forward="true" selection-start-line="49" selection-start-column="15" selection-end-line="49" selection-end-column="15" />
+        <state relative-caret-position="105">
+          <caret line="15" column="42" lean-forward="true" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handler/user_handler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-275">
+          <caret line="16" column="47" lean-forward="true" selection-start-line="16" selection-start-column="47" selection-end-line="16" selection-end-column="47" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/view/upload.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="103">
+          <caret line="30" column="65" selection-start-line="30" selection-start-column="65" selection-end-line="30" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/handler/file_handler.go">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="230">
+          <caret line="127" column="10" lean-forward="true" selection-start-line="127" selection-start-column="10" selection-end-line="127" selection-end-column="10" />
         </state>
       </provider>
     </entry>
@@ -801,36 +827,30 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/handler/file_handler.go">
+    <entry file="file://$PROJECT_DIR$/service/transfer/main.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="155">
-          <caret line="235" column="18" lean-forward="true" selection-start-line="235" selection-start-column="18" selection-end-line="235" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/view/home.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="636">
-          <caret line="173" column="7" lean-forward="true" selection-start-line="173" selection-start-column="7" selection-end-line="173" selection-end-column="7" />
+        <state relative-caret-position="300">
+          <caret line="12" column="16" lean-forward="true" selection-start-line="12" selection-start-column="16" selection-end-line="12" selection-end-column="16" />
           <folding>
-            <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
-            <element signature="n#style#0;n#button#0;n#!!top" expanded="true" />
+            <element signature="e#14#181#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/route/router.go">
+    <entry file="file://$PROJECT_DIR$/mq/consumer.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="230">
-          <caret line="17" column="49" selection-start-line="17" selection-start-column="49" selection-end-line="17" selection-end-column="49" />
+        <state relative-caret-position="175">
+          <caret line="7" column="5" selection-start-line="7" selection-start-column="5" selection-end-line="7" selection-end-column="5" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/handler/user_handler.go">
+    <entry file="file://$PROJECT_DIR$/service/transfer/process/upload_file_to_oss.go">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="42" column="34" selection-start-line="42" selection-start-column="34" selection-end-line="42" selection-end-column="34" />
+        <state relative-caret-position="122">
+          <caret line="21" column="32" lean-forward="true" selection-start-line="21" selection-start-column="32" selection-end-line="21" selection-end-column="32" />
+          <folding>
+            <element signature="e#17#163#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

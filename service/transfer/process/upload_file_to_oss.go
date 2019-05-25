@@ -19,7 +19,7 @@ func ProcessTransfer(msg []byte) bool {
 		log.Println(err.Error())
 		return false
 	}
-	fmt.Printf("%+v", pubData)
+	fmt.Printf("%+v\n", pubData)
 	// 根据临时存储文件路径，创建文件句柄
 	fin, err := os.Open(pubData.CurLocation)
 	if err != nil {

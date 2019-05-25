@@ -23,7 +23,7 @@ import (
 
 // 去上传页面
 func ToUploadHandler(c *gin.Context)  {
-	c.Redirect(http.StatusFound, "static/view/upload2.html")
+	c.Redirect(http.StatusFound, "static/view/upload.html")
 }
 // 处理文件上传
 func DoUploadHandler(c *gin.Context) {
@@ -120,10 +120,7 @@ func DoUploadHandler(c *gin.Context) {
 	suc := db.CreateUserFile(username, fileMeta.FileSha1, fileMeta.FileName, int(fileMeta.FileSize))
 	if suc {
 		// 重定向路由
-		c.JSON(http.StatusOK,gin.H{
-			"msg": "Upload Success!",
-			"code": 0,
-		})
+		c.Redirect(http.StatusFound,"/static/view/home.html")
 	} else {
 		c.JSON(http.StatusOK,gin.H{
 			"msg": "Upload Failed!",
