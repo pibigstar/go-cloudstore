@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"github.com/pibigstar/go-cloudstore/db/mysql"
+	"log"
 )
 
 // 插入文件表
@@ -49,4 +50,17 @@ func GetFileMeta(filehash string) (*TableFile, error) {
 		return nil, err
 	}
 	return &tfile, nil
+}
+
+func RenameFile(filehash, name string) bool {
+	stmt, err := mysql.DBConn().Prepare("update tbl_user_file set file_name=? where file_sha1=?")
+	if err != nil {
+		log.Println(err.Error())
+		return false
+	}
+	_, err = stmt.Exec(name, filehash)
+	if err != nil {
+		return false
+	}
+	return true
 }

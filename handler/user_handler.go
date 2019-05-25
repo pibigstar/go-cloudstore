@@ -10,7 +10,7 @@ import (
 
 // 去注册页面
 func ToUserSignupHandler(c *gin.Context)  {
-	c.Redirect(http.StatusFound, "static/view/signup.html")
+	c.Redirect(http.StatusFound, "/static/view/signup.html")
 }
 // 用户注册
 func DoUserSignupHandler(c *gin.Context){
@@ -40,7 +40,7 @@ type LoginResponse struct {
 
 // 去用户登录页面
 func ToUserLoginHandler(c *gin.Context) {
-	c.Redirect(http.StatusFound,"static/view/signin.html")
+	c.Redirect(http.StatusFound,"/static/view/signin.html")
 }
 // 处理用户登录请求
 func DoUserLoginHandler(c *gin.Context)  {

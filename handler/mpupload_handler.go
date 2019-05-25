@@ -2,6 +2,7 @@ package handler
 
 import (
 	"fmt"
+	"github.com/gin-gonic/gin"
 	"github.com/pibigstar/go-cloudstore/db"
 	"math"
 	"net/http"
@@ -31,12 +32,11 @@ const (
 )
 
 // 初始化分块上传
-func InitialMultipartUploadHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+func InitialMultipartUploadHandler(c *gin.Context) {
 
-	username := r.Form.Get("username")
-	filehash := r.Form.Get("filehash")
-	filesize, err := strconv.Atoi(r.Form.Get("filesize"))
+	username := c.Request.FormValue("username")
+	filehash := c.Request.FormValue("filehash")
+	filesize, err := strconv.Atoi(c.Request.FormValue("filesize"))
 	if err != nil {
 		fmt.Printf("Failed to parse file size to int,err:%s\n", err.Error())
 		return
@@ -63,17 +63,16 @@ func InitialMultipartUploadHandler(w http.ResponseWriter, r *http.Request) {
 		Msg:  "OK",
 		Data: uploadInfo,
 	}
-	w.Write(resp.JSONBytes())
+	c.Data(http.StatusOK,"application/json",resp.JSONBytes())
 }
 
 // 上传文件分块
-func UploadPartHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+func UploadPartHandler(c *gin.Context) {
 
 	//username := r.Form.Get("username")
-	uploadID := r.Form.Get("uploadid")
+	uploadID := c.Request.FormValue("uploadid")
 	// 文件分块索引
-	chunkIndex := r.Form.Get("index")
+	chunkIndex := c.Request.FormValue("index")
 
 	rConn := redis.RedisPool().Get()
 	defer rConn.Close()
@@ -83,13 +82,16 @@ func UploadPartHandler(w http.ResponseWriter, r *http.Request) {
 	os.MkdirAll(filePath, 0744)
 	file, err := os.Create(filePath)
 	if err != nil {
-		w.Write(utils.NewRespMsg(-1, "upload part failed", nil).JSONBytes())
+		c.JSON(http.StatusInternalServerError,gin.H{
+			"code": -1,
+			"msg": "upload part failed",
+		})
 		return
 	}
 	defer file.Close()
 	buff := make([]byte, 1024*1024)
 	for {
-		n, err := r.Body.Read(buff)
+		n, err := c.Request.Body.Read(buff)
 		if err != nil {
 			break
 		}
@@ -99,25 +101,30 @@ func UploadPartHandler(w http.ResponseWriter, r *http.Request) {
 	rConn.Do("HSET", "MP_"+uploadID, "chkidx_"+chunkIndex, 1)
 
 	// 返回客户端
-	w.Write(utils.NewRespMsg(0, "OK", nil).JSONBytes())
+	c.JSON(http.StatusOK, gin.H{
+		"msg": "OK!",
+		"code": 0,
+	})
 }
 
 // 上传合并
-func CompleteUploadHandler(w http.ResponseWriter, r *http.Request) {
-	r.ParseForm()
+func CompleteUploadHandler(c *gin.Context) {
 
-	username := r.Form.Get("username")
-	uploadid := r.Form.Get("uploadid")
-	filehash := r.Form.Get("filehash")
-	filename := r.Form.Get("filename")
-	filesize, _ := strconv.Atoi(r.Form.Get("filesize"))
+	username := c.Request.FormValue("username")
+	uploadid := c.Request.FormValue("uploadid")
+	filehash := c.Request.FormValue("filehash")
+	filename := c.Request.FormValue("filename")
+	filesize, _ := strconv.Atoi(c.Request.FormValue("filesize"))
 
 	rConn := redis.RedisPool().Get()
 	defer rConn.Close()
 
 	values, err := goRedis.Values(rConn.Do("HGETALL", "MP_"+uploadid))
 	if err != nil {
-		w.Write(utils.NewRespMsg(-1, "complete upload failed", nil).JSONBytes())
+		c.JSON(http.StatusInternalServerError,gin.H{
+			"code": 0,
+			"msg": "complete upload failed",
+		})
 		return
 	}
 	totalCount := 0
@@ -132,12 +139,18 @@ func CompleteUploadHandler(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 	if totalCount != chunkCount {
-		w.Write(utils.NewRespMsg(-1, "invalid request", nil).JSONBytes())
+		c.JSON(http.StatusInternalServerError,gin.H{
+			"code": -1,
+			"msg": "invalid request",
+		})
 		return
 	}
 	// 更新文件表和用户文件表
 	db.InsertFile(filehash, filename, "", int64(filesize))
 	db.CreateUserFile(username, filehash, filename, filesize)
 
-	w.Write(utils.NewRespMsg(0, "ok", nil).JSONBytes())
+	c.JSON(http.StatusOK,gin.H{
+		"code": 0,
+		"msg": "OK",
+	})
 }

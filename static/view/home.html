@@ -1,23 +1,15 @@
 <html>
 
 <head>
-  <script src="http://libs.baidu.com/jquery/2.0.0/jquery.min.js"></script>
-  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css"
-    integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
 
-  <!-- 可选的 Bootstrap 主题文件（一般不用引入） -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap-theme.min.css"
-    integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+  <!-- 最新版本的 Bootstrap 核心 CSS 文件 -->
+  <link rel="stylesheet" href="/static/css/bootstrap.min.css">
 
   <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"
-    integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous">
-  </script>
-
+    <script src="/static/js/jquery-3.2.1.min.js"></script>
+  {{/*<script src="/static/js/bootstrap.min.js"></script>*/}}
   <script src="/static/js/auth.js"></script>
-  <script src="https://cdn.bootcss.com/layer/3.1.0/layer.js"></script>
-  <script src="http://apps.bdimg.com/libs/layer/2.1/layer.js"></script>
+  <script src="/static/js/layui.js"></script>
 </head>
 
 <body style="width:100%;height:100%;background:#f8f8f8">
@@ -123,14 +115,14 @@
         
         var downloadHtml = '<button class="btn btn-info" ' +
           'style="height:30px;margin:5px 3px;"' +
-          'onClick = "downloadFile(\'' + dlHost + '/file/downloadurl?filehash={0}&{1}\')">下载</button>';
+          'onClick = "downloadFile(\'/file/download?filehash={0}&{1}\')">下载</button>';
         var renameFileHtml = '<button class="btn btn-warning" ' +
           'style="height:30px;margin:5px 3px;"' +
-          'onClick = "renameFile(\'{0}\',\'{1}\',\'http://apigw.fileserver.com/file/' +
+          'onClick = "renameFile(\'{0}\',\'{1}\',\'/file/' +
           'update?op=0&filehash={2}&{3}\')">重命名</button>';
         var cdlFileHtml = '<button class="btn btn-info" ' +
           'style="height:30px;margin:5px 3px;"' +
-          'onClick = "cdlFile(\'' + dlHost + '/file/download?filehash={0}&{1}\')">断点下载(火狐)</button>';
+          'onClick = "cdlFile(\'/file/download?filehash={0}&{1}\')">断点下载(火狐)</button>';
 
         for (var i = 0; i < data.length; i++) {
           var x = document.getElementById('filetbl').insertRow();
@@ -167,21 +159,18 @@
   function downloadFile(durl) {
     $.ajax({
       url: durl,
-      type: "POST",
+      type: "GET",
+      success: function (body) {
+        console.log("body:"+body.msg)
+          if(body.code==0){
+              window.open(body.msg)
+          } else {
+              alert(body.msg);
+          }
+      },
       error: function (err) {
         alert(JSON.stringify(err));
       },
-      success: function (body) {
-        try {
-          alert("文件即将下载自: " + body);
-          var elemIF = document.createElement("iframe");
-          elemIF.src = body;
-          elemIF.style.display = "none";
-          document.body.appendChild(elemIF);
-        } catch (e) {
-          alert(e);
-        }
-      }
     });
   }
 
